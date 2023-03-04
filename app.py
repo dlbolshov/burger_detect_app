@@ -166,11 +166,13 @@ if col_center.button('Detect :hamburger:', use_container_width=True):
             time_run = time.time() - start_time
             time_run = f'Inference time: {time_run:.1f}s'
             y0, x0, y1, x1 = result['detection_boxes'][0][0].numpy()
-            limit = int(
-                opencv_image.shape[1] / (opencv_image.shape[0] / input_image_size[0]))
-            
+            if opencv_image.shape[0] / opencv_image.shape[1] >= 1.75:
+                limit = int(opencv_image.shape[1] / (opencv_image.shape[0] / input_image_size[0]))
+                img = cv2.resize(opencv_image, (limit, 896), interpolation=cv2.INTER_AREA)
+            else:
+                limit = int(opencv_image.shape[0] / (opencv_image.shape[1] / input_image_size[1]))
+                img = cv2.resize(opencv_image, (512, limit), interpolation=cv2.INTER_AREA)
             thickness = 4
-            img = cv2.resize(opencv_image, (limit, 896), interpolation=cv2.INTER_AREA)
 
         if FLAG:
             start_point = (int(x0), int(y0))
