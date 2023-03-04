@@ -6,4 +6,3 @@ roboflow
 tensorflow
 tf-models-official
 google-cloud-storage
-zipfile
