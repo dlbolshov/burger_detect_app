@@ -114,7 +114,7 @@ if model_type == 'Remote':
         st.success('Model is ready!')
 
 if model_type == 'Local':
-    col3.caption("RetinaNet\n+\nResNet\n+\nFPN\n(0.6 AP)")
+    col3.caption("RetinaNet + ResNet + FPN (0.6 AP)")
     if uploaded_file:
         model_fn = get_local_model()
         st.success('Model is ready!')
