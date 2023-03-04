@@ -14,18 +14,13 @@ import zipfile
 
 
 @st.cache_resource(show_spinner='Preparing Model...', max_entries=2)
-def get_local_model(name):
+def get_local_model():
     credentials = service_account.Credentials.from_service_account_info(
         st.secrets["gcp_service_account"]
     )
     client = storage.Client(credentials=credentials)
-
     bucket_name = "burger-detect-models"
-
-    if name == 'RetinaNet + ResNet + FPN (0.6 AP)':
-        file_path = "retinanet_resnetfpn_coco.zip"
-    if name == 'RetinaNet + SpineNet (0.55 AP)':
-        file_path = "retinanet_spinenet_coco.zip"
+    file_path = "retinanet_resnetfpn_coco.zip"
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(file_path)
     file_path = os.path.basename(file_path)
@@ -53,6 +48,7 @@ def build_inputs_for_object_detection(image, input_image_size):
     return image
 
 
+# Variant for git Lfs
 # @st.cache_resource(show_spinner='Preparing Model...', max_entries=2)
 # def get_local_model(name):
 #     if name == 'RetinaNet + ResNet + FPN (0.6 AP)':
@@ -118,11 +114,9 @@ if model_type == 'Remote':
         st.success('Model is ready!')
 
 if model_type == 'Local':
-    local_name = col3.radio("Local model specification:",
-                            options=['RetinaNet + ResNet + FPN (0.6 AP)',
-                                     'RetinaNet + SpineNet (0.55 AP)'])
+    col3.caption("RetinaNet\n+\nResNet\n+\nFPN\n(0.6 AP)")
     if uploaded_file:
-        model_fn = get_local_model(local_name)
+        model_fn = get_local_model()
         st.success('Model is ready!')
 
 if uploaded_file:
