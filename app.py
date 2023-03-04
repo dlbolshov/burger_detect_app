@@ -4,11 +4,9 @@ import numpy as np
 from roboflow import Roboflow
 import time
 import bcrypt
-
 import tensorflow as tf
 import tensorflow_models as tfm
 from official.vision.ops.preprocess_ops import resize_and_crop_image
-
 from google.oauth2 import service_account
 from google.cloud import storage
 import os
