@@ -9,40 +9,40 @@ import tensorflow as tf
 import tensorflow_models as tfm
 from official.vision.ops.preprocess_ops import resize_and_crop_image
 
-from google.oauth2 import service_account
-from google.cloud import storage
-import os
-import zipfile
+# from google.oauth2 import service_account
+# from google.cloud import storage
+# import os
+# import zipfile
 
 
-@st.cache_resource(show_spinner='Preparing Model...', max_entries=2)
-def get_local_model(name):
-    credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"]
-    )
-    client = storage.Client(credentials=credentials)
+# @st.cache_resource(show_spinner='Preparing Model...', max_entries=2)
+# def get_local_model(name):
+#     credentials = service_account.Credentials.from_service_account_info(
+#         st.secrets["gcp_service_account"]
+#     )
+#     client = storage.Client(credentials=credentials)
 
-    bucket_name = "burger-detect-models"
+#     bucket_name = "burger-detect-models"
 
-    if name == 'RetinaNet + ResNet + FPN (0.6 AP)':
-        file_path = "retinanet_resnetfpn_coco.zip"
-    if name == 'RetinaNet + SpineNet (0.55 AP)':
-        file_path = "retinanet_spinenet_coco.zip"
-    bucket = client.bucket(bucket_name)
-    blob = bucket.blob(file_path)
-    file_path = os.path.basename(file_path)
-    blob.download_to_filename(file_path)
+#     if name == 'RetinaNet + ResNet + FPN (0.6 AP)':
+#         file_path = "retinanet_resnetfpn_coco.zip"
+#     if name == 'RetinaNet + SpineNet (0.55 AP)':
+#         file_path = "retinanet_spinenet_coco.zip"
+#     bucket = client.bucket(bucket_name)
+#     blob = bucket.blob(file_path)
+#     file_path = os.path.basename(file_path)
+#     blob.download_to_filename(file_path)
 
-    with zipfile.ZipFile(file_path, 'r') as zf:
-        for entry in zf.infolist():
-            try:
-                zf.extract(entry, './')
-            except zipfile.error as e:
-                pass
+#     with zipfile.ZipFile(file_path, 'r') as zf:
+#         for entry in zf.infolist():
+#             try:
+#                 zf.extract(entry, './')
+#             except zipfile.error as e:
+#                 pass
 
-    imported = tf.saved_model.load(f'./{file_path[:-4]}')
-    model = imported.signatures['serving_default']
-    return model
+#     imported = tf.saved_model.load(f'./{file_path[:-4]}')
+#     model = imported.signatures['serving_default']
+#     return model
 
 
 def build_inputs_for_object_detection(image, input_image_size):
