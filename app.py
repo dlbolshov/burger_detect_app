@@ -9,10 +9,10 @@ import tensorflow as tf
 import tensorflow_models as tfm
 from official.vision.ops.preprocess_ops import resize_and_crop_image
 
-# from google.oauth2 import service_account
-# from google.cloud import storage
-# import os
-# import zipfile
+from google.oauth2 import service_account
+from google.cloud import storage
+import os
+import zipfile
 
 
 # @st.cache_resource(show_spinner='Preparing Model...', max_entries=2)
